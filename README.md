@@ -22,7 +22,8 @@ This project provides a Python-based agent that automates the evaluation of prof
     -   `competency_history.sqlite`: The SQLite database for historical analysis data.
     -   `competency_report_langchain.md`: The generated markdown report.
 -   **`.env`**: Stores secret credentials (Jira, Google Cloud). **This file is ignored by Git.**
--   **`requirements.txt`**: A list of all the Python dependencies required to run the project.
+-   **`Pipfile`**: Specifies the project's dependencies for `pipenv`.
+-   **`Pipfile.lock`**: Ensures deterministic builds by locking dependency versions.
 -   **`.gitignore`**: Specifies which files and directories to exclude from version control.
 
 ## Setup
@@ -35,7 +36,7 @@ This project provides a Python-based agent that automates the evaluation of prof
 
 2.  **Install dependencies:**
     ```bash
-    pip install -r requirements.txt
+    pipenv install
     ```
 
 3.  **Configure your credentials:**
@@ -44,7 +45,9 @@ This project provides a Python-based agent that automates the evaluation of prof
         ```env
         JIRA_SERVER="https://your-domain.atlassian.net"
         JIRA_USERNAME="your-email@example.com"
+        # Use either JIRA_API_TOKEN or JIRA_PASSWORD
         JIRA_API_TOKEN="your_jira_api_token"
+        JIRA_PASSWORD="your_jira_password"
         
         # Path to your Google Cloud service account key file
         GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/credentials.json"
@@ -59,7 +62,7 @@ This project provides a Python-based agent that automates the evaluation of prof
 To run the agent, execute the main script from the root directory:
 
 ```bash
-python src/competency_agent.py
+pipenv run python src/competency_agent.py
 ```
 
 The script will perform the following actions:

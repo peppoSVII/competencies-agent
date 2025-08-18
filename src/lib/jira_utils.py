@@ -16,21 +16,32 @@ def get_jira_client():
         raise ValueError("Jira server and username environment variables not set.")
 
     if token:
+        print("Authenticating with JIRA_API_TOKEN")
         return JIRA(server=server, basic_auth=(user, token))
     elif password:
+        print("Authenticating with JIRA_PASSWORD")
         return JIRA(server=server, basic_auth=(user, password))
     else:
         raise ValueError("Jira API token or password not set in environment variables.")
 
 def get_jira_issues(jira_client, config):
-    """Fetches Jira issues based on the start date in the config."""
-    start_date_str = config.get("start_date")
-    if start_date_str:
-        start_date = start_date_str
-    else:
-        start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+    """Fetches Jira issues based on the configuration."""
+    jira_config = config.get("jira", {})
+    custom_jql = jira_config.get("custom_jql")
     
-    jql_query = f'assignee = currentUser() AND created >= "{start_date}"'
+    if custom_jql:
+        jql_query = custom_jql
+    else:
+        start_date_str = config.get("start_date")
+        if start_date_str:
+            start_date = start_date_str
+        else:
+            start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+        
+        jira_user = jira_config.get("user")
+        assignee = f'"{jira_user}"' if jira_user else 'currentUser()'
+        
+        jql_query = f'assignee = {assignee} AND created >= "{start_date}"'
     
     try:
         print(f"Fetching Jira issues with JQL: {jql_query}")

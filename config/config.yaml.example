@@ -13,3 +13,11 @@ days_to_look_back: 14
 start_date: "2024-01-01"
 
 # The 'competencies' section is no longer used. The script now reads the competency matrix directly from Competency_matrix.csv.
+
+# Jira Settings
+jira:
+  # Specify a Jira username to fetch issues for. If commented out or empty, it defaults to the currently authenticated user (currentUser()).
+  user: ""
+  # Define a custom JQL query. If provided, this query will be used instead of the default one.
+  # The default query is: 'assignee = {user} AND created >= "{start_date}"'
+  custom_jql: ""
